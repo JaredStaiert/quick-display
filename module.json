@@ -1,0 +1,9 @@
+{
+  "id": "display-image",
+  "title": "Display Image - module to display images in foundry from file.",
+  "description": "Simple module to share on-disk files.",
+  "version": "0.0.1",
+  "scripts": [
+    "scripts/display.js"
+  ]
+}
