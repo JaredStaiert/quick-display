@@ -2,36 +2,71 @@
  * Creates new control group and tools by hooking into getScenControlButtons
  */
 Hooks.on("getSceneControlButtons", (controls) => {
+    console.log(controls);
+
     controls.imagedisplay = {
-        activeTool: "",
+        active: false,
+        activeTool: "div",
         name: "imagedisplay",
         title: "Display Images",
         icon: "fa-solid fa-images",
-        order: 11,
+        order: 20,
         visible: game.user.isGM,
         onChange: (event, active) => { },
+        onToolChange: () => { },
         tools: {
+            div: {
+                name: "div",
+                order: 0,
+                title: "",
+                icon: "fa-solid fa-toolbox",
+                button: true,
+                onChange: (event, active) => {
+                    /** This is a load bearing tool. 
+                    *   Foundry throws an error when activeTool 
+                    *   is not defined, but since I want the tools 
+                    *   to be buttons having one designated as active 
+                    *   would cause it to execute immediately,
+                    *   will consider redesign. 
+                    */
+                }
+            },
             popup: {
-                name: "popup",
+                name: "popup", 
                 order: 1,
-                title: "Popup Image",
+                title: "popup",
                 icon: "fa-solid fa-image",
                 button: true,
                 onChange: (event, active) => {
                     if (active) {
-                        getUrlDialog();
+                        console.log(controls);
+                        uploadAndDisplayDialog("Popup");
+                    }
+                }
+            },
+            chat: {
+                name: "chat",
+                order: 2,
+                title: "chat",
+                icon: "fa-solid fa-comments",
+                button: true,
+                onChange: (event, active) => {
+                    if (active) {
+                        uploadAndDisplayDialog("Chat");
                     }
                 }
             }
         }
     };
-
-    console.log(controls);
 });
 
-async function getUrlDialog() {
+/**
+ * Displays dialog prompting user to choose image on their PC. Renders according to given option.
+ * @param {"Popup" | "Chat"} renderOption 
+ */
+async function uploadAndDisplayDialog(renderOption) {
     new foundry.applications.api.DialogV2({
-        window: { title: "Image Popup" },
+        window: { title: `Image ${renderOption}` },
         content: `
             <label><input type="file" id="share" name="choice" value="" checked></label>
         `,
@@ -71,8 +106,13 @@ async function getUrlDialog() {
                     ui.notifications.warn("Image upload unsuccessful");
                 }
                 // Render image
-                renderPopup(`worlds/${game.world.id}/${newFileName}`);
 
+                if (renderOption === "Popup") {
+                    renderPopup(`worlds/${game.world.id}/${newFileName}`);
+                }
+                if (renderOption === "Chat") {
+                    renderChat(`worlds/${game.world.id}/${newFileName}`);
+                }
             }
         }
     }).render({ force: true });
@@ -89,6 +129,19 @@ async function renderPopup(imageUrl) {
   });
   await ip.render(true);
   await ip.shareImage();
+}
+
+/**
+ * Renders ChatMessage (style: OOC) using the provided image url.
+ * @param {string} imageUrl Formatted image url.
+ */
+async function renderChat(imageUrl) {
+  await ChatMessage.create({
+    user: game.user.id,
+    speaker: ChatMessage.getSpeaker(),
+    content: `<img src="${imageUrl}" style="max-width: 100%" />`,
+    type: CONST.CHAT_MESSAGE_STYLES.OOC
+  });
 }
 
 /**
