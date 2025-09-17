@@ -1,8 +1,35 @@
 {
-  "id": "display-image",
-  "title": "Display Image - module to display images in foundry from file.",
+  "id": "quick-display",
+  "title": "Quick Display",
   "description": "Simple module to share on-disk files.",
-  "version": "0.0.1",
+  "version": "#{VERSION}#",
+  "library": "false",
+  "compatibility": {
+    "minimum": 13,
+    "verified": 13,
+    "maximum": 13
+  },
+  "authors": [
+    {
+      "name": "Jared Staiert",
+      "url": "https://github.com/JaredStaiert"
+    }
+  ],
+  "relationships": {
+    "systems": [],
+    "requires": []
+  },
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English"
+    }
+  ],
+  "url": "#{URL}#",
+  "manifest": "#{MANIFEST}#",
+  "download": "#{DOWNLOAD}#",
+  "license": "#{LICENSE}#",
+  "readme": "README.md",
   "scripts": [
     "scripts/display.js"
   ]
