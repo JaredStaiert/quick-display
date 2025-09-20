@@ -22,12 +22,12 @@ Hooks.on("getSceneControlButtons", (controls) => {
                 icon: "fa-solid fa-toolbox",
                 button: true,
                 onChange: (event, active) => {
-                    /** This is a load bearing tool. 
-                    *   Foundry throws an error when activeTool 
-                    *   is not defined, but since I want the tools 
-                    *   to be buttons having one designated as active 
-                    *   would cause it to execute immediately,
-                    *   will consider redesign. 
+                    /** Currently this tool does nothing. 
+                     * Foundry requires a tool to be active, but since
+                     * the tools below are buttons they execute when the 
+                     * toolbox is opened which is not desireable behavior. 
+                     * Will investigate toggle logic
+                     * to convert buttons to toggle UI elements.
                     */
                 }
             },
